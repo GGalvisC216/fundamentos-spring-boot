@@ -5,6 +5,8 @@ import com.platzi.springboot.fundamentos.fundamentos.bean.MyBeanWithDependency;
 import com.platzi.springboot.fundamentos.fundamentos.bean.MyBeanWithProperties;
 import com.platzi.springboot.fundamentos.fundamentos.component.ComponentDependency;
 import com.platzi.springboot.fundamentos.fundamentos.pojo.UserPojo;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -13,6 +15,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class FundamentosApplication implements CommandLineRunner {
 
+	Log LOGGER = LogFactory.getLog(FundamentosApplication.class);
 	private ComponentDependency componentDependency;
 	private MyBean myBean;
 	private MyBeanWithDependency myBeanWithDependency;
@@ -39,5 +42,12 @@ public class FundamentosApplication implements CommandLineRunner {
 		myBeanWithDependency.printWithDependency();
 		System.out.println(myBeanWithProperties.function());
 		System.out.println(userPojo.toString());
+		try {
+			int value = 10/0;
+			LOGGER.debug("Mi valor: " + value);
+		} catch (Exception e) {
+			LOGGER.error("Esto es un error por dividir entre cero", e);
+		}
+
 	}
 }
