@@ -1,10 +1,10 @@
 package com.platzi.springboot.fundamentos.fundamentos.controller;
 
 import com.platzi.springboot.fundamentos.fundamentos.entity.User;
-import com.platzi.springboot.fundamentos.fundamentos.usecase.CreateUser;
-import com.platzi.springboot.fundamentos.fundamentos.usecase.DeleteUser;
-import com.platzi.springboot.fundamentos.fundamentos.usecase.GetUser;
-import com.platzi.springboot.fundamentos.fundamentos.usecase.UpdateUser;
+import com.platzi.springboot.fundamentos.fundamentos.repository.UserRepository;
+import com.platzi.springboot.fundamentos.fundamentos.usecase.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,12 +19,14 @@ public class UserRestController {
     private CreateUser createUser;
     private DeleteUser deleteUser;
     private UpdateUser updateUser;
+    private GetPaginateUser getPaginateUser;
 
-    public UserRestController(GetUser getUser, CreateUser createUser, DeleteUser deleteUser, UpdateUser updateUser) {
+    public UserRestController(GetUser getUser, CreateUser createUser, DeleteUser deleteUser, UpdateUser updateUser, GetPaginateUser getPaginateUser) {
         this.getUser = getUser;
         this.createUser = createUser;
         this.deleteUser = deleteUser;
         this.updateUser = updateUser;
+        this.getPaginateUser = getPaginateUser;
     }
 
     @GetMapping("")
@@ -48,6 +50,17 @@ public class UserRestController {
         return updateUser.update(id, newUser)
                 .map(ResponseEntity::ok)
                 .orElseGet(()->ResponseEntity.noContent().build());
+    }
+
+    /*
+    @GetMapping("/pageable")
+    List<User> getUserPageable(@RequestParam int page, @RequestParam int size) {
+        return getPaginateUser.getPaginateUser(PageRequest.of(page, size));
+    }
+     */
+    @GetMapping("/pageable")
+    List<User> getUserPageable(Pageable pageable) {
+        return getPaginateUser.getPaginateUser(pageable);
     }
 
 }

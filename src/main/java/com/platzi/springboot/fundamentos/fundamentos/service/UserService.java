@@ -4,6 +4,8 @@ import com.platzi.springboot.fundamentos.fundamentos.entity.User;
 import com.platzi.springboot.fundamentos.fundamentos.repository.UserRepository;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,5 +49,9 @@ public class UserService {
                     user.setName(newUser.getName());
                     return userRepository.save(user);
                 });
+    }
+
+    public List<User> getPaginateUser(Pageable pageable) {
+        return userRepository.findAll(pageable).getContent();
     }
 }

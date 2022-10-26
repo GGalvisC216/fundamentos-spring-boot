@@ -31,10 +31,10 @@ public class GeneralConfiguration {
     @Value("${driver}")
     private String driver;
 
-    @Value("${username}")
+    @Value("${db.username}")
     private String username;
 
-    @Value("${password}")
+    @Value("${db.password}")
     private String password;
 
     @Bean
