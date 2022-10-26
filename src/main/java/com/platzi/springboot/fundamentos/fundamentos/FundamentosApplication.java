@@ -7,13 +7,13 @@ import com.platzi.springboot.fundamentos.fundamentos.component.ComponentDependen
 import com.platzi.springboot.fundamentos.fundamentos.entity.User;
 import com.platzi.springboot.fundamentos.fundamentos.pojo.UserPojo;
 import com.platzi.springboot.fundamentos.fundamentos.repository.UserRepository;
+import com.platzi.springboot.fundamentos.fundamentos.service.UserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -29,15 +29,17 @@ public class FundamentosApplication implements CommandLineRunner {
 	private MyBeanWithProperties myBeanWithProperties;
 	private UserPojo userPojo;
 	private UserRepository userRepository;
+	private UserService userService;
 
 
-	public FundamentosApplication(@Qualifier("componentTwoImplement") ComponentDependency componentDependency, MyBean myBean, MyBeanWithDependency myBeanWithDependency, MyBeanWithProperties myBeanWithProperties, UserPojo userPojo, UserRepository userRepository) {
+	public FundamentosApplication(@Qualifier("componentTwoImplement") ComponentDependency componentDependency, MyBean myBean, MyBeanWithDependency myBeanWithDependency, MyBeanWithProperties myBeanWithProperties, UserPojo userPojo, UserRepository userRepository, UserService userService) {
 		this.componentDependency = componentDependency;
 		this.myBean = myBean;
 		this.myBeanWithDependency = myBeanWithDependency;
 		this.myBeanWithProperties = myBeanWithProperties;
 		this.userPojo = userPojo;
 		this.userRepository = userRepository;
+		this.userService = userService;
 	}
 
 	public static void main(String[] args) {
@@ -49,6 +51,22 @@ public class FundamentosApplication implements CommandLineRunner {
 		//previousClasses();
 		saveUsersInDatabase();
 		getUserInformationWithJpql();
+		saveWithErrorTransactional();
+	}
+
+	private void saveWithErrorTransactional() {
+		User user1 = new User("TestTransactional1", "testTransactional1@domain.com", LocalDate.of(2000,3,20));
+		User user2 = new User("TestTransactional2", "testTransactional2@domain.com", LocalDate.of(1998,3,20));
+		User user3 = new User("TestTransactional3", "testTransactional3@domain.com", LocalDate.of(2005,3,20));
+		User user4 = new User("TestTransactional4", "testTransactional4@domain.com", LocalDate.of(1992,3,20));
+
+		List<User> users = Arrays.asList(user1, user2, user3, user4);
+
+		userService.saveTransactional(users);
+
+		userService.getAllUsers().stream()
+				.forEach(user -> LOGGER.info("Usuario dentro del metodo transaccional " + user));
+
 	}
 
 	private void getUserInformationWithJpql() {
