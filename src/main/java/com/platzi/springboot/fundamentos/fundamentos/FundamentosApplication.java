@@ -76,7 +76,7 @@ public class FundamentosApplication implements CommandLineRunner {
 				.stream()
 				.forEach(user -> LOGGER.info("Usuario findByNameOrEmail " + user));
 
-		 */
+
 		userRepository.findByBirthDateBetween(
 					LocalDate.of(1991,1,1),
 					LocalDate.of(1997,1,1)
@@ -88,6 +88,13 @@ public class FundamentosApplication implements CommandLineRunner {
 		userRepository.findByNameContainingOrderByIdDesc("ri")
 				.stream()
 				.forEach(user -> LOGGER.info("Usuario encontrado con containing y ordenado " + user));
+		 */
+		LOGGER.info("El usuario a partir del named parameter es: " 	+
+			userRepository.getAllByBirthDateAndEmail(
+				LocalDate.of(1999,4,11),
+				"julie@domain.com")
+				.orElseThrow(
+						()->new RuntimeException("No se encontro el usuario a partir del named parameter")));
 	}
 
 	private void saveUsersInDatabase() {
