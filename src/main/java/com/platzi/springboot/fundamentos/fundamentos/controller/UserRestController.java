@@ -45,7 +45,9 @@ public class UserRestController {
 
     @PutMapping("/{id}")
     ResponseEntity<User> replaceUser(@RequestBody User newUser, @PathVariable Long id) {
-        return new ResponseEntity<>(updateUser.update(id, newUser), HttpStatus.OK);
+        return updateUser.update(id, newUser)
+                .map(ResponseEntity::ok)
+                .orElseGet(()->ResponseEntity.noContent().build());
     }
 
 }

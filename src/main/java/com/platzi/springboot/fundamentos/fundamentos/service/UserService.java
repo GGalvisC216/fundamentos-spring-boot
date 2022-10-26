@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -38,8 +39,8 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public User update(Long id, User newUser) {
-        userRepository.findById(id)
+    public Optional<User> update(Long id, User newUser) {
+        return userRepository.findById(id)
                 .map(user -> {
                     user.setEmail(newUser.getEmail());
                     user.setBirthDate(newUser.getBirthDate());

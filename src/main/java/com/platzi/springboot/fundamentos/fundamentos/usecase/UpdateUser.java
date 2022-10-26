@@ -4,6 +4,8 @@ import com.platzi.springboot.fundamentos.fundamentos.entity.User;
 import com.platzi.springboot.fundamentos.fundamentos.service.UserService;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class UpdateUser {
     private UserService userService;
@@ -12,7 +14,7 @@ public class UpdateUser {
         this.userService = userService;
     }
 
-    public User update(Long id, User newUser) {
-        userService.update(id, newUser);
+    public Optional<User> update(Long id, User newUser) {
+        return userService.update(id, newUser);
     }
 }
